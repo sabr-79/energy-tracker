@@ -5,5 +5,5 @@ app = FastAPI()
 @app.get('/')
 
 def index():
-    return {"Msg" : "Hello, World!"}
+    return {"Msg" : "Hello, world!"}
 
