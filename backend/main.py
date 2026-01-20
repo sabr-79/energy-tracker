@@ -7,3 +7,8 @@ app = FastAPI()
 def index():
     return {"Msg" : "Hello, world!"}
 
+@app.get("/ping")
+def ping():
+    return {"status": "ok"}
+
+
