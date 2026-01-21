@@ -12,7 +12,9 @@ function App() {
   }
   return (
     <div>
-      <h1>Hello, world!</h1>
+      <title> Energy Tracker</title>
+      <h1>Coming soon.</h1>
+      <h6>In the meantime...hello world!</h6>
       <button onClick ={pingBackend}>Ping backend</button>
     </div>
     );
