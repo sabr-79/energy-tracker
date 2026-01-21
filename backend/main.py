@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+# for data validation
 from pydantic import BaseModel
+
+
 
 
 app = FastAPI()
@@ -23,6 +27,12 @@ app.add_middleware(
 
 )
 
+class SleepLog(BaseModel):
+    hours: float
+
+class Energylog(BaseModel):
+    level: int 
+
 # default msg in backend
 @app.get('/')
 def index():
@@ -32,5 +42,9 @@ def index():
 @app.get("/ping")
 def ping():
     return {"status": "ok"}
+
+@app.post("/sleep")
+def sleep():
+    return {}
 
 
