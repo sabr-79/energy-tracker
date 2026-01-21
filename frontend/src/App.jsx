@@ -6,7 +6,7 @@ function App() {
   // state vals for logs
   const [sleepHours, setSleepHours] = useState("");
   const [energyLevel, setEnergyLevel] = useState("");
-  const [waterLiters, setWaterLiters] = useState("");
+  const [waterCups, setWaterCups] = useState("");
   const [fogLevel, setFogLevel] = useState("");
   const enterLog = async () => {
     try{
@@ -16,7 +16,7 @@ function App() {
           // type conversion 
           sleep: Number(sleepHours),
           energy: Number(energyLevel),
-          water: Number(waterLiters),
+          water: Number(waterCups),
           fog: Number(fogLevel)
         }
       );
@@ -24,7 +24,7 @@ function App() {
       // Clean up after submission
       setSleepHours("");
       setEnergyLevel("");
-      setWaterLiters("");
+      setWaterCups("");
       setFogLevel("");
     } catch (error){
     console.error("Error when submitting daily log: ", error)
@@ -76,9 +76,9 @@ function App() {
       <div>
         <input
           type="number"
-          placeholder="Milliters of water"
-          value = {waterLiters}
-          onChange={(e) => setWaterLiters(e.target.value)}
+          placeholder="Cups of water"
+          value = {waterCups}
+          onChange={(e) => setWaterCups(e.target.value)}
         />
       </div>
       <div>
