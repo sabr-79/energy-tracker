@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 # for data validation
 from pydantic import BaseModel
 
+daily_log = []
+
 
 
 
@@ -27,11 +29,12 @@ app.add_middleware(
 
 )
 
-class SleepLog(BaseModel):
-    hours: float
+class Dailylog(BaseModel):
+    sleep: float
+    energy: int
+    water: float
+    fog: int
 
-class Energylog(BaseModel):
-    level: int 
 
 # default msg in backend
 @app.get('/')
@@ -43,8 +46,14 @@ def index():
 def ping():
     return {"status": "ok"}
 
-@app.post("/sleep")
-def sleep():
-    return {}
-
+@app.post("/daily-log")
+def log_day(log: Dailylog):
+    daily_log.append(log)
+    return {
+            "Msg" : "Day logged",
+            "total_days" : len(daily_log)
+            }
+@app.get("/daily-log")
+def get_logs():
+    return daily_log
 
