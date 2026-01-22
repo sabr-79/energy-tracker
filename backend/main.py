@@ -4,6 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 # for data validation
 from pydantic import BaseModel
 
+from database import engine, SessionLocal
+from models import Base, DailyLog
+from schemas import DailyLogSchema
+
+# db table creation
+Base.metadata.create_all(bind=engine)
+
 daily_log = []
 
 
@@ -47,12 +54,22 @@ def ping():
     return {"status": "ok"}
 
 @app.post("/daily-log")
-def log_day(log: Dailylog):
-    daily_log.append(log)
+def log_day(log: DailyLogSchema):
+    db = SessionLocal()
+    db_log = DailyLog(
+        sleep=log.sleep,
+        water=log.water,
+        energy=log.energy,
+        fog=log.fog
+
+    )
+    db.add(db_log)
+    db.commit()
+    db.close()
     return {
             "Msg" : "Day logged",
-            "total_days" : len(daily_log)
             }
+
 @app.get("/daily-log")
 def get_logs():
     return daily_log
