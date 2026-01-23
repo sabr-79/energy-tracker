@@ -52,15 +52,16 @@ function App() {
   }
   return (
     <div>
-     <h1> Energy Tracker.</h1>
+      <div className="h-16 flex items-center justify-right bg-indigo-900 text-orange-400 text-3xl">
+        Tailwind is working! Welcome to 'Energy Tracker.'
+      </div>
+      <h1> Energy Tracker.</h1>
       <h2>Coming soon.</h2>
       <h6>In the meantime...hello, world!</h6>
       
       {/* If button is clicked, call the pingBackend function. Entitle the button as 'ping backend' */}
       <button onClick ={pingBackend}>Ping backend</button>
       
-      {/*line break*/}
-      <br></br>
 
       <h1>Daily Log</h1>
 
