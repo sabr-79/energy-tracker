@@ -13,5 +13,8 @@ node_modules/
 build/
 dist/
 
+# DB
+app.db
+
 # Mac / OS files
 .DS_Store
