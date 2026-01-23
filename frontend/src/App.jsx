@@ -8,6 +8,8 @@ function App() {
   const [energyLevel, setEnergyLevel] = useState("");
   const [waterCups, setWaterCups] = useState("");
   const [fogLevel, setFogLevel] = useState("");
+
+  // const vs let: const is constant, let implies change
   const enterLog = async () => {
     try{
       const response = await axios.post(
@@ -20,7 +22,10 @@ function App() {
           fog: Number(fogLevel)
         }
       );
+
+      // for dev tools: on mac it's cmd+optn+I
       console.log(response.data);
+      
       // Clean up after submission
       setSleepHours("");
       setEnergyLevel("");
@@ -50,13 +55,19 @@ function App() {
      <h1> Energy Tracker.</h1>
       <h2>Coming soon.</h2>
       <h6>In the meantime...hello, world!</h6>
+      
+      {/* If button is clicked, call the pingBackend function. Entitle the button as 'ping backend' */}
       <button onClick ={pingBackend}>Ping backend</button>
-
+      
+      {/*line break*/}
       <br></br>
 
       <h1>Daily Log</h1>
 
-      {/*Input Fields*/}
+      {/*Input Fields,
+      Where the user will type their stats
+      to send to the backend.
+      */}
       <div>
         <input
           type="number"
@@ -90,6 +101,7 @@ function App() {
         />
       </div>
 
+      {/* After typing their states, the clicked button will send the info to the backend */}
       <button onClick={enterLog}>
         Enter Daily Log
       </button>

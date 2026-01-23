@@ -36,11 +36,7 @@ app.add_middleware(
 
 )
 
-class Dailylog(BaseModel):
-    sleep: float
-    energy: int
-    water: float
-    fog: int
+
 
 
 # default msg in backend
@@ -53,6 +49,8 @@ def index():
 def ping():
     return {"status": "ok"}
 
+# DailyLog vs DailyLogSchema:
+# Take the validated input and store it in the db
 @app.post("/daily-log")
 def log_day(log: DailyLogSchema):
     db = SessionLocal()
