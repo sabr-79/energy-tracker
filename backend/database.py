@@ -7,6 +7,8 @@ DATABASE_URL = "sqlite:///./app.db"
 # engine connection to db
 engine = create_engine(
     DATABASE_URL,
+
+    # sqlite specific, delete later
     connect_args={"check_same_thread": False}
                        
 )

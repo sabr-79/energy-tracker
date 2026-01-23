@@ -6,6 +6,7 @@ __pycache__/
 *.pyo
 *.pyd
 .env
+*.py[cod]
 
 # Node / React
 node_modules/
