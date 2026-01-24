@@ -1,6 +1,8 @@
 import axios from "axios"; 
 import { useState } from "react";
 
+
+
 function App() {
 
   // state vals for logs
@@ -8,6 +10,9 @@ function App() {
   const [energyLevel, setEnergyLevel] = useState("");
   const [waterCups, setWaterCups] = useState("");
   const [fogLevel, setFogLevel] = useState("");
+
+  const hour = new Date().getHours();
+  const isNight = hour >= 18 || hour < 6;
 
   // const vs let: const is constant, let implies change
   const enterLog = async () => {
@@ -55,9 +60,9 @@ function App() {
     <div className="relative min-h-screen overflow-hidden bg-gray-900 text-white">
       
       {/* Wave Background*/}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-0">
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden z-0">
         <svg
-          className="relative block w-[200%] h-64 animate-[wave_8s_linear_infinite]"
+          className="block w-[200%] h-64 animate-wave-horizontal"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
         >
@@ -65,37 +70,51 @@ function App() {
           <path
             d="M0,40 C150,80 350,0 600,30 850,60 1050,20 1200,40 L1200,120 L0,120 Z"
             fill="#312e81"
-            opacity="0.6"
+            opacity="0.5"
+            className="animate-wave-vertical-slow"
           />
 
           {/* Middle wave */}
           <path
             d="M0,50 C200,20 400,80 600,50 800,20 1000,80 1200,50 L1200,120 L0,120 Z"
             fill="#3730a3"
-          opacity="0.8"
+          opacity="0.7"
+          className="animate-wave-vertical"
           />
 
           {/* Front wave (lightest) */}
           <path
-            d="M0,60 C250,90 450,30 600,60 750,90 950,30 1200,60 L1200,120 L0,120 Z"
             fill="#4338ca"
-            />
-          </svg>
+            className="animate-wave-morph"
+            d="M0,70 C250,100 450,40 600,70 
+              C750,100 950,40 1200,70
+              C1450,100 1650,40 1800,70
+              C1950,100 2150,40 2400,70
+              L2400,120 L0,120 Z"
+          />
+        </svg>
       </div>
 
-      <div
-        className="
-          absolute top-30 right-20 w-24 h-24 rounded-full bg-orange-400 
-          animate-[pulse-glow_4s_ease-in-out_infinite]
-          "
-      />
-      <div
-        className="
-          absolute top-26 right-16 w-32 h-32 rounded-full
-          bg-orange-400/30 animate-[pulse-glow_4s_ease-in-out_infinite]
-          "
+      {!isNight && (
+        <>
+          <div
+            className="absolute top-30 right-20 w-24 h-24 rounded-full bg-orange-400 animate-pulse-glow"
+          />
+          <div
+            className="absolute top-26 right-16 w-32 h-32 rounded-full bg-orange-400/30 animate-pulse-glow"
 
-      />
+          />
+        </>
+      )}
+      {isNight && (
+        <div className="absolute top-24 right-16 w-24 h-24">
+        <div className="relative w-full h-full rounded-full bg-indigo-200">
+        <div className="absolute top-2 left-2 w-24 h-24 rounded-full bg-gray-900 " 
+        />
+        </div>
+        </div>
+      )}
+
       <div className="relative z-10 p-6 space-y-4">
       <div className="h-16 flex items-center justify-right bg-indigo-900 text-indigo-400 text-3xl">
         Tailwind is working! Welcome to 'Energy Tracker.'
@@ -106,13 +125,9 @@ function App() {
       
       {/* If button is clicked, call the pingBackend function. Entitle the button as 'ping backend' */}
       <button onClick ={pingBackend}className="px-4 py-2 bg-orange-500 text-white
-      rounded-lg
-      shadow-md
-      hover:bg-orange-400
-      transition
-      ">Ping backend</button>
+      rounded-lgshadow-md hover:bg-orange-400 transition"
+      >Ping backend</button>
       
-
       <h1>Daily Log</h1>
 
       {/*Input Fields,
@@ -162,10 +177,9 @@ function App() {
 
       {/* After typing their states, the clicked button will send the info to the backend */}
       <button onClick={enterLog}className="px-4 py-2 bg-orange-500 text-white rounded-lg
-      shadow-md
-      hover:bg-orange-400
-      transition">
-        Enter Daily Log
+      shadow-md hover:bg-orange-400 transition"
+      > 
+      Enter Daily Log
       </button>
     </div>
     </div>
@@ -173,8 +187,6 @@ function App() {
 
 
 
-  );
-  
-}
+);}
 
 export default App;
