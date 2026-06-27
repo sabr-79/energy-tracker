@@ -18,3 +18,5 @@ app.db
 
 # Mac / OS files
 .DS_Store
+
+energy_predictor.joblib
