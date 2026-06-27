@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from datetime import date, datetime
 
 # for data validation
 from pydantic import BaseModel
@@ -10,8 +12,6 @@ from schemas import DailyLogSchema
 
 # db table creation
 Base.metadata.create_all(bind=engine)
-
-daily_log = []
 
 
 
@@ -58,17 +58,39 @@ def log_day(log: DailyLogSchema):
         sleep=log.sleep,
         water=log.water,
         energy=log.energy,
-        fog=log.fog
+        fog=log.fog,
+        log_date = log.log_date or date.today()
 
     )
     db.add(db_log)
     db.commit()
+    db.refresh(db_log)
     db.close()
     return {
-            "Msg" : "Day logged",
+            "Msg" : "Day logged", "id": db_log.id,
             }
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @app.get("/daily-log")
-def get_logs():
-    return daily_log
-
+def get_logs(
+    month: str = Query(None, description="Format: YYYY-MM"),
+    db: Session = Depends(get_db)
+):
+    query = db.query(DailyLog)
+    
+    if month:
+        start_date = datetime.strptime(month, "%Y-%m").date()
+        if start_date.month == 12:
+            end_date = start_date.replace(year=start_date.year + 1, month=1, day=1)
+        else:
+            end_date = start_date.replace(month=start_date.month + 1, day=1)
+        
+        query = query.filter(DailyLog.log_date >= start_date).filter(DailyLog.log_date < end_date)
+    
+    logs = query.all()
+    return logs  

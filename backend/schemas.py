@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from datetime import date
+from typing import Optional
 
 # This defines the shape of JSON sent from the frontend
 # Not like the dailylog class in main.py, this exists only at request time
@@ -8,3 +10,4 @@ class DailyLogSchema(BaseModel):
     water: int
     energy: int
     fog: int
+    log_date: Optional[date] = None
