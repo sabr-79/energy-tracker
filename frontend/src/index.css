@@ -1,68 +1,81 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@keyframes wave-horizontal {
+  from {
+    transform: translateX(0);
   }
-  a:hover {
-    color: #747bff;
+  to {
+    transform: translateX(-50%);
   }
-  button {
-    background-color: #f9f9f9;
+}
+@keyframes wave-morph {
+  0% {
+    d: path(
+      "M0,70 C250,100 450,40 600,70 C750,100 950,40 1200,70 C1450,100 1650,40 1800,70 C1950,100 2150,40 2400,70 L2400,120 L0,120 Z"
+    );
   }
+  50% {
+    d: path(
+      "M0,65 C300,85 500,55 600,65 C700,75 900,60 1200,65 C1500,70 1700,45 1800,65 C1900,85 2150,55 2400,65 L2400,120 L0,120 Z"
+    );
+  }
+  100% {
+    d: path(
+      "M0,70 C250,100 450,40 600,70 C750,100 950,40 1200,70 C1450,100 1650,40 1800,70 C1950,100 2150,40 2400,70 L2400,120 L0,120 Z"
+    );
+  }
+}
+
+.animate-wave-morph {
+  animation: wave-morph 8s ease-in-out infinite;
+}
+
+
+@keyframes wave-vertical-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes wave-vertical {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+/* Tailwind utility hooks */
+.animate-wave-horizontal {
+  animation: wave-horizontal 18s linear infinite;
+}
+
+.animate-wave-vertical-slow {
+  animation: wave-vertical-slow 6s ease-in-out infinite;
+}
+
+.animate-wave-vertical {
+  animation: wave-vertical 5s ease-in-out infinite;
+}
+
+
+@keyframes pulse-glow{
+  0%, 100%{
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50%{
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+
 }
