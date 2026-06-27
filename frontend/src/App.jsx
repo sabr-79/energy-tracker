@@ -1,5 +1,19 @@
 import axios from "axios"; 
 import { useState, useEffect } from "react";
+import { 
+  Moon, 
+  Sun, 
+  Cloud, 
+  Droplets, 
+  Zap, 
+  Brain,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Activity,
+  Coffee,
+  Bed
+} from 'lucide-react';
 
 function getCalendarDays(year, month) {
   const firstDay = new Date(year, month, 1).getDay(); // 0=Sun, 1=Mon...
@@ -56,7 +70,7 @@ function App() {
           energy: Number(energyLevel),
           water: Number(waterCups),
           fog: Number(fogLevel),
-          date: Number(logDate)
+          log_date: logDate
         }
       );
 
@@ -69,7 +83,7 @@ function App() {
       setWaterCups("");
       setFogLevel("");
       setLogDate("");
-      await fetchLogs();
+      await fetchLogsForMonth(currentDate.getFullYear(), currentDate.getMonth());
     } catch (error){
     console.error("Error when submitting daily log: ", error)
     }
@@ -90,6 +104,21 @@ function App() {
     useEffect(() => {
     fetchLogs();}, []);
 
+  const [insights, setInsights] = useState(null);
+
+  const fetchInsights = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/insights");
+      setInsights(response.data);
+    } catch (error) {
+      console.error("Failed to fetch insights", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInsights();
+  }, []);
+
 
 
   // async == takes time. allows for await, .get is for HTTP get request to the backend
@@ -109,16 +138,13 @@ function App() {
 
     // Replace your fetchLogs with a month-specific version
     const fetchLogsForMonth = async (year, month) => {
-    try {
-      const monthStr = `${year}-${String(month + 1).padStart(2, '0')}`;
-      const response = await axios.get(`http://127.0.0.1:8000/daily-log?month=${monthStr}`);
+      try {
+        const monthStr = `${year}-${String(month + 1).padStart(2, '0')}`;
+        const response = await axios.get(`http://127.0.0.1:8000/daily-log?month=${monthStr}`);
     
-      // Convert array into a map: { "2026-06-15": { sleep: 8, ... }, ... }
-      const map = {};
-      response.data.forEach(log => {
-        const dateObj = new Date(log.log_date);
-        const key = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
-        map[key] = log;
+        const map = {};
+        response.data.forEach(log => {
+        map[log.log_date] = log;
       });
       setLogsByDate(map);
     } catch (error) {
@@ -229,7 +255,10 @@ useEffect(() => {
           <div className="text-xs">{day.date.getDate()}</div>
           {log && (
             <div className="mt-1 text-[10px] bg-orange-500/20 rounded p-1 text-orange-300">
-              ⚡{log.energy} 💧{log.water}
+              <Zap className="w-3 h-3" /> {log.energy} 
+              <Droplets className="w-3 h-3"/> {log.water} 
+              <Cloud className="w-3 h-3"/>{log.fog} 
+              <Brain className="w-3 h-3" />{log.sleep}
             </div>
           )}
         </div>
@@ -237,7 +266,31 @@ useEffect(() => {
     })}
   </div>
   </div>
-      
+      {insights && !insights.error && (
+  <div className="mt-6 p-4 bg-indigo-800/30 rounded-lg">
+    <h3 className="text-lg font-bold text-orange-300"> Your Energy Insights</h3>
+    <p className="text-sm text-indigo-200">
+      Based on {insights.stats.log_count} days of data
+    </p>
+    <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+      <div>Avg Sleep: {insights.stats.avg_sleep.toFixed(1)}h</div>
+      <div>Avg Energy: {insights.stats.avg_energy.toFixed(1)}</div>
+      <div>Avg Water: {insights.stats.avg_water.toFixed(1)} cups</div>
+      <div>Avg Fog: {insights.stats.avg_fog.toFixed(1)}</div>
+    </div>
+    <div className="mt-3 text-sm">
+      <p className="text-indigo-200">
+        Sleep ↔ Energy: {(insights.insights.sleep_energy_correlation * 100).toFixed(0)}% correlation
+      </p>
+      <p className="text-indigo-200">
+        Water ↔ Fog: {(insights.insights.water_fog_correlation * 100).toFixed(0)}% correlation
+      </p>
+      <p className="text-indigo-200">
+        Model accuracy (R²): {(insights.model.r2_score * 100).toFixed(0)}%
+      </p>
+    </div>
+  </div>
+)}
       {/* If button is clicked, call the pingBackend function. Entitle the button as 'ping backend' */}
       <button onClick ={pingBackend}className="px-4 py-2 bg-orange-500 text-white
       rounded-lgshadow-md hover:bg-orange-400 transition"
@@ -299,6 +352,7 @@ useEffect(() => {
       > 
       Enter Daily Log
       </button>
+      
     </div>
     </div>
 

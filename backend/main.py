@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import date, datetime
+from insights import generate_insights
 
 # for data validation
 from pydantic import BaseModel
@@ -94,3 +95,9 @@ def get_logs(
     
     logs = query.all()
     return logs  
+
+@app.get("/insights")
+def get_insights():
+    """Return ML insights about your energy patterns"""
+    result = generate_insights()
+    return result

@@ -1,8 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # sqlite now, postgreSQL later
-DATABASE_URL = "sqlite:///./app.db"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # engine connection to db
 engine = create_engine(
